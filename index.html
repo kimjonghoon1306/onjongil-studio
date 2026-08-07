@@ -65,6 +65,13 @@
   .scene.film .cap{position:relative;z-index:2;font-family:"Fraunces",serif;font-weight:300;font-style:italic;font-size:clamp(36px,7vw,104px);color:#fff;opacity:0;transform:translateY(30px);transition:all 1.1s cubic-bezier(.16,1,.3,1)}
   .scene.film.in .cap{opacity:1;transform:none}
   .scene.film .frame{color:#fff}
+  /* 스피커 버튼 */
+  .sound-btn{position:absolute;right:30px;bottom:64px;z-index:6;width:52px;height:52px;border-radius:50%;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.5);backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;cursor:none;transition:background .3s,transform .3s cubic-bezier(.16,1,.3,1)}
+  .sound-btn:hover{background:rgba(255,255,255,.3);transform:scale(1.1)}
+  .sound-btn svg{width:23px;height:23px}
+  @media(max-width:860px){.sound-btn{right:20px;bottom:56px;width:46px;height:46px}}
 
   /* 로고 씬 (빨강 마무리) */
   .scene.logo{background:var(--red);color:#fff}
@@ -261,6 +268,7 @@
 <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
+  let soundOn=false;
   // 커서
   const cur=document.getElementById('cur'),ring=document.getElementById('ring');
   let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
@@ -280,7 +288,7 @@
     if(en.isIntersecting){
       if(el.hasAttribute('data-type')&&!seen.has(el)){seen.add(el);typeIt(el);}
       if(el.classList.contains('flip'))el.classList.add('in');
-      if(el.hasAttribute('data-film')){el.classList.add('in');el.querySelector('video').play().catch(()=>{});}
+      if(el.hasAttribute('data-film')){el.classList.add('in');const fv=el.querySelector('video');fv.muted=!soundOn;fv.play().catch(()=>{});}
       if(el.hasAttribute('data-logo'))el.classList.add('in');
     } else {
       if(el.hasAttribute('data-film'))el.querySelector('video').pause();
@@ -310,11 +318,30 @@
 
   // 라이트박스
   const lb=document.getElementById('lb'),lbv=document.getElementById('lbv');
-  function openLB(src){lbv.src=src;lb.classList.add('on');lbv.currentTime=0;lbv.play().catch(()=>{})}
+  function openLB(src){lbv.src=src;lbv.muted=false;lb.classList.add('on');lbv.currentTime=0;lbv.play().catch(()=>{})}
   function closeLB(){lbv.pause();lb.classList.remove('on');setTimeout(()=>lbv.removeAttribute('src'),300)}
   document.querySelectorAll('.browser video,.phone video').forEach(v=>v.parentElement.addEventListener('click',()=>openLB(v.dataset.src)));
   document.getElementById('lbx').addEventListener('click',closeLB);lb.addEventListener('click',e=>{if(e.target===lb)closeLB()});
   addEventListener('keydown',e=>{if(e.key==='Escape')closeLB()});
+
+  // 인트로 큰 영상 스피커 토글
+  const spkOn='<svg viewBox="0 0 24 24" fill="#fff"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5.5a9 9 0 0 1 0 13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+  const spkOff='<svg viewBox="0 0 24 24" fill="#fff"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M22 9l-6 6M16 9l6 6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+  const films=[...document.querySelectorAll('.scene.film')];
+  function updSpk(){document.querySelectorAll('.sound-btn').forEach(b=>b.innerHTML=soundOn?spkOn:spkOff)}
+  films.forEach(sc=>{
+    const btn=document.createElement('button');btn.className='sound-btn';btn.setAttribute('aria-label','소리 켜기/끄기');
+    sc.appendChild(btn);
+    btn.addEventListener('mouseenter',()=>ring.classList.add('big'));
+    btn.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();soundOn=!soundOn;
+      films.forEach(f=>{f.querySelector('video').muted=!soundOn});
+      updSpk();
+      const cv=sc.querySelector('video');cv.muted=!soundOn;if(soundOn)cv.play().catch(()=>{});
+    });
+  });
+  updSpk();
 </script>
 </body>
 </html>
