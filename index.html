@@ -109,7 +109,7 @@
   @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   /* ===== 본문 쇼케이스 ===== */
-  .showcase{padding:130px 48px}
+  .showcase{padding:130px clamp(56px,7vw,140px)}
   @media(max-width:860px){.showcase{padding:88px 24px}}
   .sc-head{display:flex;align-items:baseline;gap:18px;margin-bottom:84px;border-bottom:1px solid var(--line);padding-bottom:22px}
   .sc-head .num{font-family:"Fraunces",serif;font-style:italic;font-size:18px;color:var(--accent)}
@@ -177,7 +177,7 @@
   .hq-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-3px)}
   .hq-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
 
-  footer{background:#120E0A;padding:120px 48px 46px}
+  footer{background:#120E0A;padding:120px clamp(56px,7vw,140px) 46px}
   @media(max-width:860px){footer{padding:90px 24px 40px}}
   footer .fh{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(38px,8vw,104px);line-height:1.03;letter-spacing:-.02em}
   footer .fh em{font-style:italic;color:var(--accent)}
