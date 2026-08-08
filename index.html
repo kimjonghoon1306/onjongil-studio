@@ -62,7 +62,6 @@
   /* 영상 씬 */
   .scene.film{padding:0}
   .scene.film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-  @media(max-width:860px){.scene.film video{object-fit:contain;background:#0E0D0B}}
   .scene.film::after{content:"";position:absolute;inset:0;background:rgba(10,8,6,.42);z-index:1}
   .scene.film .cap{position:relative;z-index:2;font-family:"Fraunces",serif;font-weight:300;font-style:italic;font-size:clamp(36px,7vw,104px);color:#fff;opacity:0;transform:translateY(30px);transition:all 1.1s cubic-bezier(.16,1,.3,1)}
   .scene.film.in .cap{opacity:1;transform:none}
