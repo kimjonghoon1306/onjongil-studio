@@ -11,12 +11,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{--bg:#1B1611;--red:#E43A2B;--cream:#F0EDE4;--muted:#938B79;--accent:#D2683C;--line:rgba(240,237,228,.1)}
-  *{margin:0;padding:0;box-sizing:border-box}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-touch-callout:none!important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
   html{scroll-behavior:smooth;scroll-snap-type:y proximity}
   body{background:radial-gradient(120% 90% at 50% -10%,#241D16 0%,#1B1611 52%,#16110D 100%) fixed,var(--bg);color:var(--cream);font-family:"Inter",sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none;
     -webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}
-  img,video{-webkit-touch-callout:none;-webkit-user-drag:none;user-select:none}
-  a{color:inherit;text-decoration:none}
+  /* 롱프레스 저장/공유 차단: 미디어를 눌러도 이벤트가 콜아웃 차단된 부모로 가게 pointer-events 제거 (탭/라이트박스는 부모 핸들러가 처리) */
+  img,video{-webkit-touch-callout:none!important;-webkit-user-drag:none;user-select:none;pointer-events:none}
+  .lb video{pointer-events:auto}
+  a{color:inherit;text-decoration:none;-webkit-touch-callout:none!important}
   .serif{font-family:"Fraunces",serif}
   .round{font-family:"Fredoka",sans-serif}
 
@@ -309,6 +311,9 @@
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
   let soundOn=false;
+  // 롱프레스/우클릭 저장·공유 메뉴 차단
+  document.addEventListener('contextmenu',e=>e.preventDefault());
+  document.addEventListener('dragstart',e=>e.preventDefault());
   // 커서
   const cur=document.getElementById('cur'),ring=document.getElementById('ring');
   let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
