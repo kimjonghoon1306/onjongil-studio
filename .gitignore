@@ -1,3 +1,5 @@
 .env.local
 node_modules/
 *.DS_Store
+
+media/video/_hevc_backup/
